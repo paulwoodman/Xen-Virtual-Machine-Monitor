@@ -3,7 +3,7 @@ development:
   socket: /var/run/mysqld/mysqld.sock
   database: xendb_dev
   username: root
-  password: Assimilated
+  password: 
   host: localhost
 
 # Warning: The database defined as 'test' will be erased and
@@ -22,5 +22,5 @@ production:
   socket: /var/run/mysqld/mysqld.sock
   database: xendb_production
   username: root
-  password: Assimilated
+  password: 
   host: localhost
