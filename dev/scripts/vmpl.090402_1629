@@ -1,0 +1,278 @@
+#!/usr/bin/perl
+
+use DBI;
+use DBD::mysql;
+
+use Time::Local;
+
+#($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
+@ts = localtime();
+$ts[4]++;
+$ts[5] += 1900;
+for ( $t; $t <= 4; $t++ ) { $ts[$t] = zeropad($ts[$t]); }
+$ts = "$ts[4]/$ts[3]/$ts[5]/$ts[2]:$ts[1]:$ts[0] ";
+
+
+$log = "/var/www/scripts/vm.log";
+open(LOG, ">>$log") || die print "no file ${log}\n";
+
+print (LOG "$ts\n");
+
+# CONFIG VARIABLES
+$platform = "mysql";
+$database = "xsdb";
+$host = "localhost";
+$port = "3306";
+$hoststable = "hosts";
+$vmstable = "vms";
+$user = "root";
+$pw = "Assimilated";
+
+# DATA SOURCE NAME
+$dsn = "dbi:mysql:$database:localhost:3306";
+
+# PERL DBI CONNECT
+$connect = DBI->connect($dsn, $user, $pw);
+
+
+##########################################
+#
+# PREPARE THE QUERY TO GET HOST IP's
+$hostsquery = "SELECT ip FROM hosts WHERE live=1 ORDER BY ip";
+$hostsquery_handle = $connect->prepare($hostsquery);
+#
+# EXECUTE THE QUERY
+$hostsquery_handle->execute();
+#
+# BIND TABLE COLUMNS TO VARIABLES
+$hostsquery_handle->bind_columns(undef, \$ip);
+#
+# LOOP THROUGH RESULTS
+$a = 0;
+while($hostsquery_handle->fetch()) {
+$hostsips[$a] = $ip; 
+print "firsthostsips $hostsips[$a] ip $ip\n";  #debug
+$a++;
+}
+#$hostsquery = $hostsquery_handle->disconnect;
+##########################################
+
+
+#Grab list of VMs and states then Grab extended info on running machines:
+if ( $#hostsips > 0 ) {
+@vmlist = `ssh root\@$hostsips[0] xe vm-list`;
+$a = 0;
+$b = 0;
+while ( $a <= $#hostsips ) {
+
+print "hostsips $hostsips[$a]\n"; #debug
+
+@tempextinfo = `ssh root\@$hostsips[$a] xenstore-ls`;
+$c = 0;
+
+$extinfo[$b] = "hostip $hostsips[$a]";
+$b++;
+while ( $c <= $#tempextinfo ) {
+
+$extinfo[$b] = $tempextinfo[$c];
+print "extinfo $extinfo[$b]\n"; #debug
+print "b $b c $c\n"; #debug
+$b++;
+$c++;
+
+} #while ( $c <= $#tempextinfo )
+$a++;
+} #while ( $a <= $#hostips )
+} else {
+
+print (LOG "No hosts found.\n");
+exit 1;
+
+} #if ( $#hostsips > 0 )
+
+$i = 0;
+
+for ( $v = 0; $v <= $#vmlist; $v++ ) {
+
+chomp $vmlist[$v];
+
+$vmlist[$v] =~ s/[ ]+/ /g;
+
+SWITCH: {
+
+if ( $vmlist[$v] =~ /^[ ]*uuid / ) { $uuid[$i] = parseline($vmlist[$v]); last SWITCH; }
+if ( $vmlist[$v] =~ /^[ ]*name-label / ) { $name[$i] = parseline($vmlist[$v]); last SWITCH; }
+if ( $vmlist[$v] =~ /^[ ]*power-state / ) { 
+$state[$i] = parseline($vmlist[$v]); 
+if ( $state[$i] =~ /running/ ) { 
+@ei = get_ei($uuid[$i], $name[$i], $state[$i]); 
+$eihostip[$i] = $ei[0];
+$eivmuuid[$i] = $ei[1];
+$eivmmem[$i] = $ei[2];
+$eivmip[$i] = $ei[3];
+$eivncport[$i] = $ei[4];
+
+} elsif ( $state[$i] =~ /halted/ ) {
+
+print "We are about to run the lock subroutine because the state is $state[$i].\n";
+$lock[$i] = lock($uuid[$i]);
+print "We just got back from the lock subroutine and lock is $lock[$i].\n";
+
+} #if ( $state[$i] =~ /running/ )
+$i++; 
+last SWITCH; 
+} #if ( $vmlist[$v] =~ /^[ ]*power-state / )
+
+} #SWITCH
+
+} #for ( $v = 0; $v <= $vmlistin[$#vmlistin]; $v++ )
+
+
+
+for ( $x = 0; $x < $i; $x++ ) {
+
+if ( $name[$x] !~ /xshost[0-9][0-9]/ && $name[$x] !~ /IEXRA/ ) { 
+
+#print "uuid $uuid[$x] name $name[$x] state $state[$x] lock $lock[$x] eihostip $eihostip[$x] eivmuuid $eivmuuid[$x] eivmmem $eivmmem[$x] eivmip $eivmip[$x] eivncport $eivncport[$x]\n"; 
+
+#BEGINNING OF THE DB UPDATE.
+
+if ( $state[$x] =~ /running/ ) {
+
+#DO I NEED TO PUT IN lock BECAUSE I GOT THAT FROM THE DB?
+
+print "State is running.\n";
+print "uuid $uuid[$x] name $name[$x] state $state[$x] eihostip $eihostip[$x] eivmuuid $eivmuuid[$x] eivmmem $eivmmem[$x] eivmip $eivmip[$x] eivncport $eivncport[$x]\n";
+
+##$vmsupdate = "UPDATE `vms` SET `uuid` = '$uuid[$x]', `ip` = '$eivmip[$x]', `name` = '$name[$x]', `hdsize` = '', `ram` = '$eivmmem[$x]', `state` = '$state[$x]', `hostuuid` = '', `vncport` = '$eivncport[$x]', `starttime` = '', `username` = '', `lock` = '$lock[$x]', WHERE `vms`.`uuid` = '$uuid[$x]'";
+$vmsupdate = "UPDATE `vms` SET `uuid` = '$uuid[$x]', `ip` = '$eivmip[$x]', `ram` = '$eivmmem[$x]', `state` = '$state[$x]', `hostuuid` = '$eihostip[$x]', `vncport` = '$eivncport[$x]' WHERE `vms`.`name` = '$name[$x]'";
+$vmsupdate_handle = $connect->prepare($vmsupdate);
+$vmsupdate_handle->execute();
+#$vmsupdate = $vmsupdate_handle->disconnect;
+
+} elsif ( $state[$x] =~ /halted/ && $lock[$x] == 0 ) {
+
+print "State is halted and lock is 0.\n";
+print "uuid $uuid[$x] name $name[$x] state $state[$x] lock $lock[$x] eihostip $eihostip[$x] eivmuuid $eivmuuid[$x] eivmmem $eivmmem[$x] eivmip $eivmip[$x] eivncport $eivncport[$x]\n";
+
+$vmsupdate = "UPDATE `vms` SET `uuid` = '', `ip` = '', `ram` = '', `state` = '', `hostuuid` = '', `vncport` = '', `starttime` = '', `username` = '', `lock` = '1' WHERE `vms`.`uuid` = '$uuid[$x]'";
+$vmsupdate_handle = $connect->prepare($vmsupdate);
+$vmsupdate_handle->execute();
+#$vmsupdate = $vmsupdate_handle->disconnect;
+
+`ssh root\@$hostsips[0] xe vm-uninstall force="true" vm="$uuid[$x]"`;
+
+} else {
+
+print "State is not running and if lock is 0 then state is not halted either or is state is halted then lock is not 0.\n";
+print "uuid $uuid[$x] name $name[$x] state $state[$x] lock $lock[$x] eihostip $eihostip[$x] eivmuuid $eivmuuid[$x] eivmmem $eivmmem[$x] eivmip $eivmip[$x] eivncport $eivncport[$x]\n";
+
+#$vmsupdate = "UPDATE `vms` SET `uuid` = '$uuid[$x]', `name` = '$name[$x]', `state` = '$state[$x]', `lock` = '$lock[$x]' WHERE `vms`.`uuid` = '$uuid[$x]'";
+#$vmsupdate_handle = $connect->prepare($vmsupdate);
+#$vmsupdate_handle->execute();
+#$vmsupdate = $vmsupdate_handle->disconnect;
+
+} #if ( $state[$x] =~ /running/ )
+
+#END OF THE DB UPDATE.
+
+
+} #if ( $name[$x] !~ /xshost[0-9][0-9]/ && $name[$x] !~ /IEX RA/ )
+
+} #for ( $x = 0; $x <= $end; $x++ )
+
+
+exit 0;
+#####################################
+sub zeropad {
+
+$timeelem = $_[0];
+if ( $timeelem <= 9 ) { $timeelem = "0${timeelem}"; }
+return $timeelem;
+
+}
+#####################################
+sub parseline {
+
+@vm = split /:/, $_[0]; 
+$vm[$#vm] =~ s/^[ ]*//; 
+$vm[$#vm] =~ s/[ ]*$//; 
+
+return $vm[$#vm];
+
+}
+#####################################
+sub get_ei {
+
+$eiuuid = $_[0];
+$einame = $_[1];
+$eistate = $_[2];
+$uuidflag = 0;
+
+foreach $elem (@extinfo) {
+
+chomp $elem;
+
+print "elem H${elem}H\n";
+
+if ( $elem =~ /^hostip/ ) { ($dummy01, $hostip) = split / /, $elem;  print "hostip $hostip\n"; }
+if ( $elem =~ /vm/ ) { 
+$uuidflag = 0;
+($dummy01, $dummy02, $vmuuid) = split/\//, $elem; 
+$vmuuid =~ s/\"$//;
+print "vmuuid $vmuuid eiuuid $eiuuid\n";
+
+if ( $vmuuid =~ $eiuuid ) {
+
+print "We have a match.\n"; #debug
+$uuidflag = 1;
+
+} #if ( $vmuuid =~ $eiuuid )
+
+} #if ( $elem =~ /^[ ]*vm =/ )
+
+if ( $elem =~ /target \=/ && $uuidflag == 1 ) { ($dummy01, $vmmem) = split/\"/, $elem; print "vmmem $vmmem\n"; }
+if ( $elem =~ /ip \=/ && $uuidflag == 1 ) { ($dummy01, $vmip) = split/\"/, $elem; print "vmip $vmip\n"; }
+
+print "We are checking for vnc-port.\n";
+
+if ( $elem =~ /^    vnc-port \=/ && $uuidflag == 1 ) { 
+
+($dummy01, $vncport) = split/\"/, $elem; 
+
+print "vncport $vncport\n";
+
+return $hostip, $vmuuid, $vmmem, $vmip, $vncport;
+
+} #if ( $elem =~ /^[ ]*vnc-port =/ )
+
+} #foreach $elem (@extinfo)
+
+}
+#####################################
+sub lock {
+
+$lockuuid = $_[0];
+
+print "lockuuid $lockuuid\n"; #debug
+
+# PREPARE THE QUERY TO GET LOCK VALUE
+$lockquery = "SELECT lock FROM vms WHERE vms.uuid=$lockuuid";
+$lockquery_handle = $connect->prepare($lockquery);
+#
+# EXECUTE THE QUERY
+$lockquery_handle->execute();
+#
+# BIND TABLE COLUMNS TO VARIABLES
+$lockquery_handle->bind_columns(undef, \$lockvalue);
+#
+
+return $lockvalue;
+
+#$lockquery = $lockquery_handle->disconnect;
+
+}
+#####################################
+exit 0;
+
+

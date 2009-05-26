@@ -1,0 +1,107 @@
+<% if(@templatecount == 1) %>
+  <% for template in @templateinfo %>
+
+    <script type="text/javascript">
+      function groupremove<%= template.activetemplate %>() {
+        $.ajax({
+          url: "/admin/deletegroup/<%= template.activetemplate %>",
+          cache: false,
+          success: function(html) {
+            $("#popup").html(html);
+          }
+        });
+      };
+
+      function removegroup<%= template.activetemplate %>() {
+        fillscreen();
+        groupremove<%= template.activetemplate %>();
+      };
+
+      function vmDelete<%= template.activetemplate %>() {
+        $("#start").load("/admin/delete/<%= template.activetemplate %>");
+        setTimeout('unfillscreen()', 6000);
+        setTimeout('displaygrouplist()', 6000);
+      }
+
+      function deletevm<%= template.activetemplate %>() {
+        displayprogress();
+        vmDelete<%= template.activetemplate %>();
+      };
+
+      function displaypopupVM() {
+        $.ajax({
+          url: "/admin/poweron/<%= @tmachinename %>",
+          cache: false,
+          success: function(html) {
+            $("#popup").html(html);
+          }
+        });
+      };
+      function displaycommitVM() {
+        $.ajax({
+          url: "/admin/commit/<%= @tmachinename %>",
+          cache: false,
+          success: function(html) {
+            $("#popup").html(html);
+          }
+        });
+      };
+      function startVM() {
+        fillscreen();
+        displaypopupVM();
+      };
+      function commitVM() {
+        fillscreen();
+        displaycommitVM();
+      };
+    </script>
+
+    <% @machinename = "Template-" + template.activetemplate %>
+    <% @machinecount = Machine.count(:all, :conditions => [ "name = ?", @machinename ]) %>
+    <% if(@machinecount == 1) %>
+      <% @machineinfo = Machine.find(:all, :conditions => [ "name = ?", @machinename ]) %>
+      <% for machine in @machineinfo %>
+        <div class="lefttextwhite">
+          <div class="templatename"><%= template.activetemplate %></div>
+          <% @templatelock = Group.find(:all, :conditions => [ "tname = ?", @machinename ]) %>
+          <% for lockdata in @templatelock %>
+            <% if(lockdata.lock == 1) %>
+              Locked by <%= lockdata.owner %><br/>
+            <% else %>
+              Group is not locked<br/>
+            <% end %>
+          <% end %>
+          <% if(lockdata.lock == 1 && lockdata.owner == current_user.login) %>
+            <% for machine in @rmachine %>
+              <% if(machine.state == 0 && machine.ip == '') %>
+                <a href="#" onClick="startVM()">Power On</a><br/>
+              <% else %>
+              <% end %>
+              <% if(machine.state == 0 && machine.ip != '') %>
+                <a href="#" onClick="commitVM()">Commit Image</a><br/>
+              <% end %>
+              <% if(machine.vncport > 5900) %>
+                <% if(machine.hostuuid == '172.25.2.245') %>
+                  <% @serverid = 1 %>
+                <% elsif(machine.hostuuid == '172.25.2.246') %>
+                  <% @serverid = 2 %>
+                <% else %>
+                  <% @serverid = 3 %>
+                <% end %>
+                <a href = "/viewer/<%= machine.name %>/<%= @serverid %>/<%= machine.vncport %>" target="vnc">Connect to Console</a><br/>
+              <% end %>
+            <% end %>
+
+            <br/><a href="#" onClick="removegroup<%= template.activetemplate %>()">Remove Group</a><br/>
+          <% else %>
+            <br/><div class="linethrough">Remove Group</div>
+          <% end %>
+
+          <div class="showright">
+            <a id="cleardetails" onClick = "cleardetails();" href="#">Clear Details</a>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

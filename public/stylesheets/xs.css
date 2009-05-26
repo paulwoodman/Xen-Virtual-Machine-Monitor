@@ -1,0 +1,169 @@
+html, body { margin: 0; padding: 0; background-color: #f5f5f5; font-family: sans-serif; font-size: 14px; }
+a, a:visited { color: #3f456f; text-decoration: none; font-weight: bold; }
+a:hover { color: #999; }
+
+.normalfont { font-weight: normal; }
+.linethrough { text-decoration: line-through; }
+
+#header { height: 75px; background: #000; background-image: url("/images/hdr-grad.gif"); background-repeat: repeat-x; }
+.header { height: 75px; background-image: url("/images/head-txt.png"); background-repeat: no-repeat; }
+
+#logout { position: absolute; top: 55px; right: 10px; color: #fff; font-size: 12px; font-weight: bold; }
+#logout a, #logout a:visited { color: #fff; text-decoration: none; }
+#logout a:hover { color: #999; }
+
+#loginbox { position: relative; margin: auto; height: 220px; width: 320px; margin-top: 150px; background-image: url('/images/login.png'); background-repeat: no-repeat; text-align: right; }
+#login-form { position: absolute; top: 70px; right: 30px; color: #fff; font-weight: bold; }
+#login-name input { width: 162px; border: 0px; }
+#login-password input { width: 162px; border: 0px; margin: 5px 0 3px 0; }
+#submitform { width: 70px; border: 0px; margin-left: 1px; margin: 5px 0 5px 0; }
+#submitformdark { width: 70px; border: 0px; margin-left: 1px; margin: 5px 0 5px 0; background-color: #ddd; }
+.wrongpassword { padding: 10px 30px 0 0; font-size: 12px; }
+#user_name { width: 162px; border: 1px solid #c2cbd2; }
+#user_password { width: 162px; border: 1px solid #c2cbd2; }
+#user_login { width: 162px; border: 1px solid #c2cbd2; }
+
+
+#menu { float: left; width: 100%; background: #000; background-image: url("/images/tabbg.gif"); background-repeat: repeat-x; color: #fff; border-bottom: 2px solid #c2cbd2;  border-top: 1px solid #c2cbd2; }
+#menu ul { margin: 0; padding: 0px 10px 0 50px; list-style: none; }
+#menu li { display: inline; margin: 0; padding: 0; }
+#menu a { float: left; background: url("/images/tableftE.gif") no-repeat left top; margin: 0; padding: 0 0 0 4px; text-decoration: none; font-weight: normal; }
+#menu a span { float: left; display: block; background: url("/images/tabrightE.gif") no-repeat right top; padding: 5px 15px 4px 6px; color: #FFF; }
+#menu a span { float: none; }
+#menu a:hover span { color:#FFF; }
+#menu a:hover { background-position:0% -42px; }
+#menu a:hover span { background-position:100% -42px; }
+
+/*** This is the width and the color for our left column ***/
+.outer { border-left: 300px solid #e3e3e4; border-right: 250px solid #f5f5f5; height: 100%; }
+.inner { width: 100%; }
+/*** Same length as .outer border-left but with negative value ***/
+.float-wrap { float: left; width: 100%; margin-left: -300px; }
+/*** Same length as .outer border-left but with negative value ***/
+#content { float: right; background: #f5f5f5; margin-right: -300px; width: 100%; }
+* html #content { position: relative; }
+.contentWrap { padding: 10px; }
+#left { float: left; width: 280px; }
+.leftfix { position: relative; left: 10px; top: 10px; }
+.left { padding: 0; color: #ddd; }
+.bar { height: 30px; background-image: url("/images/bar.jpg"); background-repeat: repeat-x; }
+.bartext { padding: 8px 0 0 10px; color: #fff; font-weight: bold; }
+.barspacer { height: 15px; background-color: #e3e3e4; }
+.lefttext { padding: 10px; border: 1px solid #c2cbd2; background-color: #eff2f3; color: #000; }
+* html #left { position: relative; height: 250px; }
+/** margin-right = width of the right column + the padding. ***/
+#right { float: right; width: 240px; padding: 10px 5px 10px 5px; margin-right: -250px; }
+#right a, #right a:visited { font-weight: normal; color: #008000; font-size: 12px; }
+#right a:hover { color: #999; }
+* html #right { height: 250px; position: relative; }
+.leftlist { padding-top: 5px; }
+.leftlinks { text-align: right; }
+.leftlinks a { font-weight: normal; font-size: 12px; }
+.leftlinks a:hover { color: #3f456f; }
+
+#showyourvms a{ font-weight: normal; font-size: 12px; }
+#showavailable { color: #3f456f; font-weight: normal; }
+
+#admincontent { width: 700px; margin-left: auto; margin-right: auto; }
+#adminleft { float: left; width: 350px; position: relative; }
+#adminleft a, #adminleft a:visited { color: #fff; text-decoration: none; }
+#adminleft a:hover { color: #999; }
+#adminright { float: right; display: inline; position: relative; width: 350px; }
+
+#adminfill { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 15; background-image:url("/images/trans-bg.png"); }
+#groupaddbox { position: relative; margin: auto; width: 315px; margin-top: 250px; text-align: left; background-color: #333; z-index: 10; color: #fff; font-weight: bold; padding: 10px; }
+#submitgroup { border: 0px; margin-left: 1px; margin-top: 2px; background-color: #333; color: #fff; font-weight: bold; font-size: 12px; position: absolute; bottom: 10px; right: 5px; }
+
+#fillscreen { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 15; background-image:url("/images/trans-bg.png"); display: none; }
+#popup { position: relative; margin: auto; width: 300px; margin-top: 250px; background-color: #f7f7f7; text-align: right; text-align: left; font-size: 14px; }
+#popuptext { text-align: center; padding: 10px 0 10px 0; }
+#popuptext a{ font-size: 12px; }
+
+.progressBar { margin-left: auto; margin-right: auto; width: 216px; height: 41px; background: url(/images/bg_bar.gif) no-repeat 0 0; position: relative; }
+.progressBar span { position: absolute; display: block; width: 200px; height: 25px; background: url(/images/bar.gif) no-repeat 0 0; top: 8px; left: 8px; overflow: hidden; text-indent: -8000px; }
+.progressBar em { position: absolute; display: block; width: 200px; height: 25px; background: url(/images/bg_cover.gif) repeat-x 0 0; top: 0; }
+
+.progressBarslow { margin-left: auto; margin-right: auto; width: 216px; height: 41px; background: url(/images/bg_bar.gif) no-repeat 0 0; position: relative; }
+.progressBarslow span { position: absolute; display: block; width: 200px; height: 25px; background: url(/images/barslow.gif) no-repeat 0 0; top: 8px; left: 8px; overflow: hidden; text-indent: -8000px; }
+.progressBarslow em { position: absolute; display: block; width: 200px; height: 25px; background: url(/images/bg_cover.gif) repeat-x 0 0; top: 0; }
+
+#leftbox { width: 330px; padding: 20px 10px 10px 10px; color: #000; }
+#leftbox a, #leftbox a:visited { color: #424d5d; text-decoration: none; font-weight: normal; }
+#leftbox a:hover { color: #999; }
+.barwhite { height: 30px; background-image: url("/images/barwhite.png"); background-repeat: repeat-x; }
+.barred { height: 30px; background-image: url("/images/barred.png"); background-repeat: repeat-x; }
+.bartextred { padding: 6px 0 8px 10px; color: #fff; font-weight: bold; }
+.bartextredr { text-align: right; font-size: 12px; }
+.bartexta { padding: 3px 0 8px 10px; color: #fff; font-weight: bold; }
+.bartextwhite { padding: 6px 0 8px 10px; color: #424d5d; font-weight: bold; }
+.bartextwhiter { padding: 6px 10px 8px 0; color: #424d5d; font-weight: bold; text-align: right; }
+.bartextbwhite { position: absolute; top:27px; right: 20px; font-size: 12px; text-align: right; color: #424d5d; }
+.barspacera { height: 15px; background-color: #f5f5f5; }
+.lefttexta { padding: 5px 10px 5px 10px; border-left: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; background-color: #555; font-size: 12px; }
+.lefttextwhite { padding: 5px 10px 5px 10px; border: 1px solid #c2cbd2; background-color: #fff; font-size: 12px; border-bottom: 2px solid #c2cbd2; }
+.templatename { font-size: 14px; color: #424d5d; font-weight: bold; text-align: right; }
+.lockinfo { text-align: right; }
+#slider { display:none; }
+#groupslider { display:none; }
+
+.showname { text-align: right; margin-top: -16px; margin-right: 40px; }
+
+#rightbox { width: 330px; padding: 20px 10px 10px 10px; color: #000; text-align: right; }
+#rightboxuser { width: 330px; padding: 20px 10px 10px 10px; color: #000; text-align: right; }
+#rightboxuser a{ font-weight: normal; font-size: 12px; }
+.newgroup { padding-bottom: 20px; font-size: 12px; }
+#cancel { font-size: 12px; padding-bottom: 5px; }
+#cancel a, #cancel:visited { color: #fff; }
+#cancel a:hover { color: #999; }
+
+#templatelist { height: 18px; line-height: 18px; }
+#templatelist a, #templatelist a:visited { font-weight: normal; font-size: 12px; }
+#templatelist a:hover { color: #999; }
+#templatelistl { width: 50%; float: left; font-size: 14px; }
+.templatelistl { padding-right: 10px; }
+#templatelistr { width: 50%; float: right; text-align: left; font-size: 12px; }
+.templateon { font-weight: bold; color: #005000; }
+.templateoff { font-weight: bold; color: #500000; }
+.locked { padding-right: 6px; }
+a.locked { color: #000; }
+a.locked a:hover { color: #000; }
+.showright { text-align: right; }
+
+#vmlist { border: 1px solid #c2cbd2; background-color: #f0f0f0; }
+#vmlistcontainer { padding: 5px 10px 5px 10px; }
+#vmspacer { height: 10px; }
+.vmname { font-size: 16px; font-weight: bold; color: #424d5d; }
+.vmname a:hover{ color: #424d5d; }
+#details { padding-left: 10px; }
+#detailsbottom { height: 20px; background-image: url("/images/barbottom.png"); }
+#detailsbottomred { height: 20px; background-image: url("/images/barbottomred.png"); }
+#detailsbottom a:hover{ color: #424d5d; }
+.detailsbottomtext { text-align: right; padding: 2px 5px 0 0; font-size: 12px; }
+.detailsbottomtext a{ font-weight: normal; }
+.detailsbottomtextred { text-align: right; padding: 2px 5px 0 0; font-size: 12px; color: #f7f7f7; }
+.detailsbottomtextred a{ font-weight: normal; color: #f7f7f7; }
+.availabletitle { font-size: 14px; font-weight: bold; color: #424d5d; text-align: right; }
+#righttext { padding: 5px 10px 5px 10px; }
+.startvm { height: 18px; line-height: 18px; font-weight: bold; color: #444; }
+img.percentImage { background: white url(/images/percentImage_back.png) top left no-repeat; padding: 0; margin: 5px 0 0 0; background-position: 1px 0; }
+#detailsright { float: right; }
+.hostlistg { text-align: right; color: #006000; }
+.hostlistr { text-align: right; color: #600000; font-weight: bold; }
+
+#logshow { width: 700px; margin-left: auto; margin-right: auto; padding-top: 35px; }
+#search { margin-left: 15px; margin-top: 8px; height: 14px; width: 130px; font-size: 12px; border: 0; }
+.search { background-image: url("/images/searchbox.png"); background-repeat: no-repeat; width: 180px; height: 31px; float: right; }
+.logshow { border: 1px solid #c2cbd2; margin-top: 40px; }
+#submitsearch { width: 20px; height: 20px; background-image: url("/images/search.png"); border: 0; }
+.refresh { height: 20px; line-height: 15px; float: left; font-size: 12px; }
+.refresh a{ color: #424d5d; padding-right: 15px; }
+
+#change-password { width: 162px; border: 0px; margin-left: 5px; margin-top: 2px; border: 1px solid #c2cbd2; }
+.passhighlight { color: #800000; padding-bottom: 5px; }
+#submitformpw { width: 120px; border: 0px; margin-left: 1px; margin-top: 2px; }
+
+.clear { clear: both; }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix { display: inline-block; }
+* html .clearfix{ height: 1%; }
+.clearfix { display: block; }

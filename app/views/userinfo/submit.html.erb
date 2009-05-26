@@ -1,0 +1,14 @@
+<%= params[:username] %><br/>
+<%= params[:oldpassword] %><br/>
+
+<%= @oldcrypto %><br/>
+<%= @newcrypto %><br/>
+<%= @match %>
+<% if (@goodpw == 1) %>
+  Right PW
+<% elsif (@goodpw == 0) %>
+  Wrong PW
+<% end %>
+<% if (@match == 0) %>
+  New don't match
+<% end %>

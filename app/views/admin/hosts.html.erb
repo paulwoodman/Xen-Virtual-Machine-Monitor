@@ -1,0 +1,15 @@
+<div class="bartextwhite">
+  Host Status
+</div>
+<div class="lefttextwhite">
+  <% for host in @hosts %>
+    <% if(host.live == 1) %>
+      <div class="hostlistg">
+      <%= host.hostname %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= host.ip %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alive
+    <% else %>
+      <div class="hostlistr">
+      <%= host.hostname %>&nbsp;&nbsp;&nbsp;&nbsp;<%= host.ip %>&nbsp;&nbsp;Down
+    <% end %>
+    </div>
+  <% end %>
+</div>

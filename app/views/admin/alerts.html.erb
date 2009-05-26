@@ -1,0 +1,23 @@
+<div class="barred">
+  <div class="bartextred">
+    Manage Alerts
+  </div>
+
+  <div class="lefttextwhite">
+    <div class="bartextredr">
+      <div id="slidein"><a href="#" onClick="slidein();">Add Alert</a></div>
+      <div id="slider">
+        <form action="/admin/newalert">
+          Message:<br/><textarea rows="2" cols="30" name="addalert"></textarea><br/>
+          <input id="submitformdark" onClick="fillscreen()" type="submit" value="Submit" />
+        </form>
+        <a href="#" onClick="slideout();">Cancel</a>
+      </div>
+    </div>
+    <% if(@alertcount > 0) %>
+      <% for alert in @alerts %>
+        <a href="/admin/deletealert/<%= alert.id %>">Delete</a> <%= alert.message %><br/><br/>
+      <% end %>
+    <% end %>
+  </div>
+</div>

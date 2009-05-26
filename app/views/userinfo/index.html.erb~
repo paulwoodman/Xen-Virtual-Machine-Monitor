@@ -1,0 +1,236 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/xs.css"/>
+  
+  <script type="text/javascript" src="/javascripts/jquery.js"></script>
+
+  <script type="text/javascript">
+    function slidein() {
+      if ($("#slider").is(":hidden")) {
+        $("#slider").slideDown("slow");
+        $("#slidein").hide();
+      } else {
+        $("#slider").hide();
+      }
+    };
+
+    function slideout() {
+      if ($("#slider").is(":hidden")) {
+        $("#slider").show("slow");
+      } else {
+        $("#slider").slideUp();
+        $("#slidein").show();
+      }
+    };
+    
+    function fillscreen() {
+      if ($("#fillscreen").is(":hidden")) {
+        $("#fillscreen").fadeIn("slow");
+      } else {
+        $("#fillscreen").fadeOut();
+        $("#fillscreen").show();
+      }
+    };
+    function unfillscreen() {
+      $("#fillscreen").fadeOut();
+    };
+
+  </script>
+    
+</head>
+
+<body>
+
+<div id="fillscreen">
+  <div id="popup">
+  </div>
+</div>
+
+<div id="header">
+  <div class="header"></div>
+</div>
+<div id="menu">
+  <ul>
+    <li><a href="/monitor"><span>Machine Monitor</span></a></li>
+    <% if(current_user.gid == 0) %>
+      <li><a href="/admin"><span>Administration</span></a></li>
+    <% end %>
+    <li><a href="/events"><span>Logs</span></a></li>
+    <li><a href="/userinfo"><span>User Info</span></a></li>
+  </ul>
+</div>
+
+<div id="showcontent">
+<div id="admincontent">
+  <div id="adminwrapper" class="clearfix">
+    <div id="adminright">
+
+        <div id="rightboxuser">
+        
+          <% if(!params[:username]) %>
+            <div class="availabletitle"><%= current_user.login %></div>
+            <%= @rbname %><br/>
+            <%= @rbusertype %><br/><br/>
+
+            <div id="slidein"><a href="#" onClick="slidein();">Change Password</a></div>
+            <div id="slider">
+              <form action="/userinfo/modify/<%= current_user.login %>/password" method="POST">
+               <input type="hidden" id="login" name="username" value="<%= params[:pwusername] %>" />
+            
+               Old password:<input id="change-password" name="oldpassword" size="18" type="password"/><br/><br/>
+               New password:<input id="change-password" name="newpassword" size="18" type="password"/><br/>
+               Again:<input id="change-password" name="newpasswordcheck" size="18" type="password"/><br/>
+            
+               <input type="submit" id="submitformpw" name="submit" value="Change Password"/>
+              </form>
+              <a href="#" onClick="slideout();">Cancel</a>
+            </div>
+          <% end %>
+          
+          <% if(params[:username] && !params[:attribute]) %>
+            <% if current_user.gid != 0 %>
+            <% else %>
+              <div class="availabletitle"><%= @chusername %></div>
+              <%= @chname %><br/>
+              <%= @chtype %><br/><br/>
+              <div id="slidein"><a href="#" onClick="slidein();">Change Password</a></div>
+              <div id="slider">
+                <form action="/userinfo/modify/<%= params[:username] %>/adminpassword" method="POST">
+                 <input type="hidden" id="login" name="username" value="<%= params[:pwusername] %>" />
+            
+                 New password:<input id="change-password" name="newpassword" size="18" type="password"/><br/>
+                 Again:<input id="change-password" name="newpasswordcheck" size="18" type="password"/><br/>
+            
+                 <input type="submit" id="submitformpw" name="submit" value="Change Password"/>
+                </form>
+                <a href="#" onClick="slideout();">Cancel</a>
+              </div>
+              <% if(@chtype == "Administrator") %>
+                <a href="/userinfo/modify/<%= params[:username] %>/revoke">Revoke administrator privileges</a><br/>
+              <% else %>
+                <a href="/userinfo/modify/<%= params[:username] %>/grant">Grant administrator privileges</a><br/>
+              <% end %>
+              
+              <script>
+                function displaypopup() {
+                  $.ajax({
+                    url: "/userinfo/delete/<%= params[:username] %>",
+                    cache: false,
+                    success: function(html) {
+                      $("#popup").html(html);
+                    }
+                  });
+                };
+                function deleteUser() {
+                  fillscreen();
+                  displaypopup();
+                }
+              </script>
+              <a href="#" onClick="deleteUser()">Delete User</a>
+              
+            <% end %>
+          <% end %>
+          
+          <% if(params[:attribute] == "password") %>
+            <% if (@goodpw == 1 && @match == 1) %>
+              <div class="availabletitle"><%= current_user.login %></div>
+              <%= @rbname %><br/>
+              <%= @rbusertype %><br/><br/>
+              <b>Password changed.</b>
+            <% elsif (@goodpw == 1 && @match == 0) %>
+              <div class="availabletitle"><%= current_user.login %></div>
+              <%= @rbname %><br/>
+              <%= @rbusertype %><br/><br/>
+
+              <b>New passwords don't match:</b><br/>
+              <form action="/userinfo/modify/<%= current_user.login %>/password" method="POST">
+               <input type="hidden" id="login" name="username" value="<%= params[:pwusername] %>" />
+            
+               Old password:<input id="change-password" name="oldpassword" size="18" type="password"/><br/><br/>
+               New password:<input id="change-password" name="newpassword" size="18" type="password"/><br/>
+               Again:<input id="change-password" name="newpasswordcheck" size="18" type="password"/><br/>
+            
+               <input type="submit" id="submitformpw" name="submit" value="Change Password"/>
+              </form>
+              <a href="/userinfo">Cancel</a>
+            <% elsif (@goodpw == 0) %>
+              <div class="availabletitle"><%= current_user.login %></div>
+              <%= @rbname %><br/>
+              <%= @rbusertype %><br/><br/>
+
+              <b>Password incorrect:</b><br/>
+              <form action="/userinfo/modify/<%= current_user.login %>/password" method="POST">
+               <input type="hidden" id="login" name="username" value="<%= params[:pwusername] %>" />
+            
+               Old password:<input id="change-password" name="oldpassword" size="18" type="password"/><br/><br/>
+               New password:<input id="change-password" name="newpassword" size="18" type="password"/><br/>
+               Again:<input id="change-password" name="newpasswordcheck" size="18" type="password"/><br/>
+            
+               <input type="submit" id="submitformpw" name="submit" value="Change Password"/>
+              </form>
+              <a href="/userinfo">Cancel</a>
+            <% end %>
+          <% end %>
+          
+          <% if(params[:attribute] == "adminpassword") %>
+            <% if(@match == 1) %>
+              <b>Password changed.</b>
+            <% else %>
+              <div class="availabletitle"><%= params[:username] %></div>
+              <%= @chname %><br/>
+              <%= @chtype %><br/><br/
+              <b>Passwords don't match.</b>
+              <form action="/userinfo/modify/<%= params[:username] %>/adminpassword" method="POST">
+                <input type="hidden" id="login" name="username" value="<%= params[:pwusername] %>" />
+            
+                New password:<input id="change-password" name="newpassword" size="18" type="password"/><br/>
+                Again:<input id="change-password" name="newpasswordcheck" size="18" type="password"/><br/>
+            
+                <input type="submit" id="submitformpw" name="submit" value="Change Password"/>
+               </form>
+               <a href="/userinfo/<%= params[:username] %>">Cancel</a>
+            <% end %>
+          <% end %>    
+
+        </div>
+      
+    </div>
+    <div id="adminleft">
+      <div id="leftbox">
+        <div class="barwhite">
+          <div class="bartextwhite">
+            Users
+          </div>
+
+          <div class="bartextbwhite">
+            <% if (current_user.gid == 0) %>
+              <a href="#">Add User</a>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="lefttextwhite">
+          <div class="userlist">
+             <% for user in @userlist %>
+               <div class="usereditlist">
+                 <% if (current_user.gid == 0) %>
+                   <a href="/userinfo/<%= user.login %>">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <% end %>
+                 <%= user.login %><div class="showname">(<%= user.name %>)</div>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+</body>
+
+</html>

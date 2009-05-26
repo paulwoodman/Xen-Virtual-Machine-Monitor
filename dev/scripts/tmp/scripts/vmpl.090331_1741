@@ -1,0 +1,248 @@
+#!/usr/bin/perl
+
+use DBI;
+use DBD::mysql;
+
+$log = "/var/www/scripts/vm.log";
+open(LOG, ">>$log") || die print "no file ${log}\n";
+
+
+# CONFIG VARIABLES
+$platform = "mysql";
+$database = "xsdb";
+$host = "localhost";
+$port = "3306";
+$hoststable = "hosts";
+$vmstable = "vms";
+$user = "root";
+$pw = "Assimilated";
+
+# DATA SOURCE NAME
+$dsn = "dbi:mysql:$database:localhost:3306";
+
+# PERL DBI CONNECT
+$connect = DBI->connect($dsn, $user, $pw);
+
+
+##########################################
+# PREPARE THE QUERY TO POPULATE @lastuuid, etc.
+$vmsquery = "SELECT uuid,name,state FROM vms ORDER BY uuid";
+$vmsquery_handle = $connect->prepare($vmsquery);
+#
+# EXECUTE THE QUERY
+$vmsquery_handle->execute();
+#
+# BIND TABLE COLUMNS TO VARIABLES
+$vmsquery_handle->bind_columns(undef, \$uuid, \$name, \$state);
+#
+# LOOP THROUGH RESULTS
+$a = 0;
+while($vmsquery_handle->fetch()) {
+$lastuuid[$a] = $uuid;
+$lastname[$a] = $name;
+$laststate[$a] = $state;
+$a++;
+}
+#
+#$vmsquery_handle->disconnect();
+#
+#
+# PREPARE THE QUERY TO GET POPULATE @lastuuid, etc.
+$hostsquery = "SELECT ip FROM hosts WHERE live=1 ORDER BY ip";
+$hostsquery_handle = $connect->prepare($hostsquery);
+#
+# EXECUTE THE QUERY
+$hostsquery_handle->execute();
+#
+# BIND TABLE COLUMNS TO VARIABLES
+$hostsquery_handle->bind_columns(undef, \$ip);
+#
+# LOOP THROUGH RESULTS
+$a = 0;
+while($hostsquery_handle->fetch()) {
+$hostsips[$a] = $ip; 
+print "firsthostsips $hostsips[$a] ip $ip\n";  #debug
+$a++;
+}
+##########################################
+
+
+#Grab list of VMs and states then Grab extended info on running machines:
+if ( $#hostsips > 0 ) {
+@vmlist = `ssh root\@$hostsips[0] xe vm-list`;
+$a = 0;
+$b = 0;
+while ( $a <= $#hostsips ) {
+
+print "hostsips $hostsips[$a]\n"; #debug
+
+@tempextinfo = `ssh root\@$hostsips[$a] xenstore-ls`;
+$c = 0;
+
+$extinfo[$b] = "hostip $hostsips[$a]";
+$b++;
+#while ( $b <= $#tempextinfo ) {
+while ( $c <= $#tempextinfo ) {
+
+$extinfo[$b] = $tempextinfo[$c];
+print "extinfo $extinfo[$b]\n"; #debug
+print "b $b c $c\n"; #debug
+$b++;
+$c++;
+
+} #while ( $c <= $#tempextinfo )
+$a++;
+} #while ( $a <= $#hostips )
+} else {
+
+print (LOG "No hosts found.\n");
+exit 1;
+
+} #if ( $#hostsips > 0 )
+
+$i = 0;
+
+for ( $v = 0; $v <= $#vmlist; $v++ ) {
+
+chomp $vmlist[$v];
+
+$vmlist[$v] =~ s/[ ]+/ /g;
+
+SWITCH: {
+
+if ( $vmlist[$v] =~ /^[ ]*uuid / ) { $uuid[$i] = parseline($vmlist[$v]); findoldvm($uuid[$i]); last SWITCH; }
+if ( $vmlist[$v] =~ /^[ ]*name-label / ) { $name[$i] = parseline($vmlist[$v]); last SWITCH; }
+if ( $vmlist[$v] =~ /^[ ]*power-state / ) { 
+$state[$i] = parseline($vmlist[$v]); 
+if ( $state[$i] =~ /running/ ) { 
+@ei = get_ei($uuid[$i], $name[$i], $state[$i]); 
+$eihostip[$i] = $ei[0];
+$eivmuuid[$i] = $ei[1];
+$eivmmem[$i] = $ei[2];
+$eivmip[$i] = $ei[3];
+$eivncport[$i] = $ei[4];
+} #if ( $state[$i] =~ /running/ )
+$i++; 
+last SWITCH; 
+} #if ( $vmlist[$v] =~ /^[ ]*power-state / )
+
+} #SWITCH
+
+} #for ( $v = 0; $v <= $vmlistin[$#vmlistin]; $v++ )
+
+
+
+for ( $x = 0; $x < $i; $x++ ) {
+
+if ( $name[$x] !~ /xshost[0-9][0-9]/ && $name[$x] !~ /IEX RA/ ) { 
+
+#print "$uuid[$x] $name[$x] $state[$x]\n"; 
+print "uuid $uuid[$x] name $name[$x] state $state[$x] eihostip $eihostip[$x] eivmuuid $eivmuuid[$x] eivmmem $eivmmem[$x] eivmip $eivmip[$x] eivncport $eivncport[$x]\n"; 
+
+######MIKE'S EXAMPLE
+#I've replaced the variables I use with actual entries, which are between single quotes:
+#
+#UPDATE `xsdb`.`templates` SET `lock` = '1', `owner` = 'mwspitzer' WHERE `templates`.`id` = '1'
+#
+#SELECT * FROM templates WHERE id = '1'
+#
+#UPDATE `xsdb`.`templates` SET `lock` = '0', `owner` = '' WHERE `templates`.`id` = '1'
+#
+#SELECT * FROM templates WHERE id = '1'
+######END MIKE'S EXAMPLE
+
+#This is where the mysql inserts go.
+# DEFINE A MySQL QUERY
+#$myquery = "UPDATE" 
+#$tablename (vms) 
+#VALUES (DEFAULT,'$uuid[$x]','$eivmip[$x]','$name[$x]',NULL,)";
+
+# EXECUTE THE QUERY FUNCTION
+#$execute = $connect->query($myquery);
+
+
+} #if ( $name[$x] !~ /xshost[0-9][0-9]/ && $name[$x] !~ /IEX RA/ )
+
+} #for ( $x = 0; $x <= $end; $x++ )
+
+@lastuuid = @uuid;
+@lastname = @name;
+@laststate = @state;
+
+#####################################
+sub parseline {
+
+@vm = split /:/, $_[0]; 
+$vm[$#vm] =~ s/^[ ]*//; 
+$vm[$#vm] =~ s/[ ]*$//; 
+
+return $vm[$#vm];
+
+}
+#####################################
+sub findoldvm {
+
+if ( $#lastuuid > 0 ) {
+
+for ( $y = 0; $y <= $#lastuuid; $y++ ) {
+if ( $lastuuid[$y] =~ /$_[0]/ ) {
+
+SWITCH: {
+delete $lastuuid[$y];
+delete $lastname[$y];
+delete $laststate[$y];
+last SWITCH;
+} #SWITCH
+
+} #if ( $lastuuid[$y] =~ /$uuid[$x]/ )
+} #for ( $y = 0; $y <= $#lastuuid; $y++ )
+} #if ( $#lastuuid > 0 )
+
+}
+#####################################
+sub get_ei {
+
+$eiuuid = $_[0];
+$einame = $_[1];
+$eistate = $_[2];
+
+foreach $elem (@extinfo) {
+
+chomp $elem;
+
+print "elem H${elem}H\n";
+
+if ( $elem =~ /^hostip/ ) { ($dummy01, $hostip) = split / /, $elem;  print "hostip $hostip\n"; }
+if ( $elem =~ /vm/ ) { 
+($dummy01, $dummy02, $vmuuid) = split/\//, $elem; 
+$vmuuid =~ s/\"$//;
+print "vmuuid $vmuuid eiuuid $eiuuid\n";
+
+if ( $vmuuid =~ $eiuuid ) {
+
+print "We have a match.\n"; #debug
+
+if ( $elem =~ /target \=/ ) { ($dummy01, $vmmem) = split/\"/, $elem; print "vmmem $vmmem\n"; }
+if ( $elem =~ /ip \=/ ) { ($dummy01, $vmip) = split/\"/, $elem; print "vmip $vmip\n"; }
+
+print "We are checking for vnc-port.\n";
+
+if ( $elem =~ /^    vnc-port \=/ ) { 
+
+($dummy01, $vncport) = split/\"/, $elem; 
+
+print "vncport $vncport\n";
+
+return $hostip, $vmuuid, $vmmem, $vmip, $vncport;
+
+} #if ( $elem =~ /^[ ]*vnc-port =/ )
+} #if ( $vmuuid =~ $eiuuid )
+} #if ( $elem =~ /^[ ]*vm =/ )
+
+} #foreach $elem (@extinfo)
+
+}
+#####################################
+exit 0;
+
+

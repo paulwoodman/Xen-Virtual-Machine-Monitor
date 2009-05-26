@@ -1,0 +1,17 @@
+<script type="text/javascript">
+  function startCommit() {
+    displayprogresscommit();
+    $("#start").load("/admin/copy/<%= params[:templatename] %>");
+    setTimeout('unfillscreen()', 7000);
+  };
+</script>
+
+<div class="barwhite">
+  <div class="bartextwhite">
+    Template Control
+  </div>
+</div>
+<div id="popuptext">
+  Commit <%= @machinename %>?<br/>
+  <a href="#" onClick="startCommit()">Start</a> &nbsp; <a href="#" onClick="unfillscreen();">Cancel</a>
+</div>

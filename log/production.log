@@ -1,0 +1,200 @@
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/phpmyadmin/" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+
+
+
+ActionController::RoutingError (No route matches "/null" with {:method=>:get}):
+    /vendor/rails/actionpack/lib/action_controller/routing/recognition_optimisation.rb:67:in `recognize_path'
+    /vendor/rails/actionpack/lib/action_controller/routing/route_set.rb:384:in `recognize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:148:in `handle_request'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:107:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `synchronize'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:104:in `dispatch'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:120:in `dispatch_cgi'
+    /vendor/rails/actionpack/lib/action_controller/dispatcher.rb:35:in `dispatch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:103:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:153:in `with_signal_handler'
+    /vendor/rails/railties/lib/fcgi_handler.rb:101:in `process_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:78:in `process_each_request'
+    /usr/lib/ruby/1.8/fcgi.rb:612:in `each_cgi'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each'
+    /usr/lib/ruby/1.8/fcgi.rb:609:in `each_cgi'
+    /vendor/rails/railties/lib/fcgi_handler.rb:77:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `catch'
+    /vendor/rails/railties/lib/fcgi_handler.rb:76:in `process_each_request'
+    /vendor/rails/railties/lib/fcgi_handler.rb:50:in `process!'
+    /vendor/rails/railties/lib/fcgi_handler.rb:24:in `process!'
+    /public/dispatch.fcgi:26
+

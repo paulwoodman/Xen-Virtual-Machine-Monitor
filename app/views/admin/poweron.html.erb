@@ -1,0 +1,18 @@
+<script type="text/javascript">
+  function startTemplate() {
+    displayprogressbuild();
+    setTimeout('displayprogressstart()', 7000);
+    $("#start").load("/admin/start/<%= params[:templatename] %>");
+    setTimeout('unfillscreen()', 14000);
+  };
+</script>
+
+<div class="barwhite">
+  <div class="bartextwhite">
+    Template Control
+  </div>
+</div>
+<div id="popuptext">
+  Power on <%= @machinename %>?<br/>
+  <a href="#" onClick="startTemplate()">Start</a> &nbsp; <a href="#" onClick="unfillscreen();">Cancel</a>
+</div>

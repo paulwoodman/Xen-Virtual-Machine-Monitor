@@ -1,0 +1,23 @@
+<% @machineid = Machine.find(:all, :conditions => ["name = ?", params[:machinename]]) %>
+<% for machine in @machineid %>
+  <% if(machine.name =~ /^RunningTemplate-*/) %>
+  <% else %>
+    <% Machine.update(machine.id, {:used => 0}) %>
+    <% @message = params[:username] + " connected to " + machine.name + "." %>
+    <% XenLog.create( :logtype => '6', :message => @message ) %>
+  <% end %>
+<% end %>
+
+<html>
+
+<applet code="VncViewer.class" archive="/javascripts/VncViewer.jar" width="100%" height="100%">
+<param name="PORT" value="<%= params[:server] %><%= params[:port] %>">
+<param name="Open New Window" value="yes">
+<param name="Show controls" value="yes">
+<param name="Offer relogin" value="yes">
+<param name="Encoding" value="Tight">
+<param name="Show offline desktop" value="no">
+<param name="Cursor shape updates" value="ignore">
+</applet>
+
+</html>

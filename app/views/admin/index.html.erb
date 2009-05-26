@@ -1,0 +1,245 @@
+<% if(@wait == 1) %>
+  Wait...
+<% end %>
+
+<% if(@showpage == 1) %>
+
+<% if(current_user.gid == 0) %>
+
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/xs.css"/>
+
+  <script type="text/javascript" src="/javascripts/jquery.js"></script>
+
+  <script type="text/javascript">
+
+    function displaymaster() {
+      $.ajax({
+        url: "/admin/master",
+        cache: false,
+        success: function(html) {
+          $("#showmaster").html(html);
+        }
+      });
+      setTimeout('displaymaster()', 5000);
+    };
+    function displaygrouplist() {
+      $.ajax({
+        url: "/admin/grouplist",
+        cache: false,
+        success: function(html) {
+          $("#showgrouplist").html(html);
+        }
+      });
+    };
+    function displayhosts() {
+      $.ajax({
+        url: "/admin/hosts",
+        cache: false,
+        success: function(html) {
+          $("#showhosts").html(html);
+        }
+      });
+      setTimeout('displayhosts()', 10000);
+    };
+    function displayalerts() {
+      $.ajax({
+        url: "/admin/alerts",
+        cache: false,
+        success: function(html) {
+          $("#showalerts").html(html);
+        }
+      });
+    };
+    function displaydetails() {
+      $.ajax({
+        url: "/admin/details",
+        cache: false,
+        success: function(html) {
+          $("#showdetails").html(html);
+        }
+      });
+      setTimeout('displaydetails()', 5000);
+    };
+
+    function initialLoad() {
+      displaymaster();
+      displaygrouplist();
+      displaydetails();
+      displayhosts();
+      displayalerts();
+    };
+
+    function masterlock() {
+      $("#masterlock").load("/admin/masterlock/1");
+    }
+    function masterunlock() {
+      $("#masterlock").load("/admin/masterlock/0");
+    };
+
+      function cleardetails() { 
+        $("#cleardetails").load("/admin/cleardetails/1");
+      };
+
+    function slidein() {
+      if ($("#slider").is(":hidden")) {
+        $("#slider").slideDown("normal");
+        $("#slidein").hide();
+      } else {
+        $("#slider").hide();
+      }
+    };
+
+    function slideout() {
+      if ($("#slider").is(":hidden")) {
+        $("#slider").show("slow");
+      } else {
+        $("#slider").slideUp();
+        $("#slidein").show();
+      }
+    };
+
+    function groupslidein() {
+      if ($("#groupslider").is(":hidden")) {
+        $("#groupslider").slideDown("normal");
+        $("#groupslidein").hide();
+      } else {
+        $("#groupslider").hide();
+      }
+    };
+
+    function groupslideout() {
+      if ($("#groupslider").is(":hidden")) {
+        $("#groupslider").show("slow");
+      } else {
+        $("#groupslider").slideUp();
+        $("#groupslidein").show();
+      }
+    };
+
+    function fillscreen() {
+      if ($("#fillscreen").is(":hidden")) {
+        $("#fillscreen").fadeIn("slow");
+      } else {
+        $("#fillscreen").fadeOut();
+        $("#fillscreen").show();
+      }
+    };
+    function unfillscreen() {
+      $("#fillscreen").fadeOut();
+    };
+
+    function displayprogress() {
+      $.ajax({
+        url: "/monitor/progressbar",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+    function displayprogressbuild() {
+      $.ajax({
+        url: "/monitor/progressbarbuilding",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+    function displayprogressstart() {
+      $.ajax({
+        url: "/monitor/progressbarstarting",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+    function displayprogresscommit() {
+      $.ajax({
+        url: "/monitor/progressbarcommit",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+
+    $(document).ready(initialLoad);
+  </script>
+
+</head>
+<body>
+
+<div id="fillscreen">
+  <div id="popup">
+  </div>
+</div>
+
+<div id="header">
+  <div class="header"></div>
+</div>
+
+<div id="menu">
+  <ul>
+    <li><a href="/monitor"><span>Machine Monitor</span></a></li>
+    <li><a href="/admin"><span>Administration</span></a></li>
+    <li><a href="/events"><span>Logs</span></a></li>
+    <li><a href="/userinfo"><span>User Info</span></a></li>
+  </ul>
+</div>
+
+<!-- Show Admin Page -->
+<div id="admincontent">
+  <div id="adminwrapper" class="clearfix">
+    <div id="adminright">
+
+      <div id="showgrouplist">
+      </div>
+
+    </div>
+    <div id="adminleft">
+      <div id="leftbox">
+
+        <div id="showmaster">
+        </div>
+
+        <div class="barspacera"></div>
+        <div class="barwhite">
+          <div class="bartextwhite">
+            Group Control
+          </div>
+        </div>
+
+        <div id="showdetails">
+        </div>
+
+        <div class="barspacera"></div>
+        <div class="barwhite">
+
+          <div id="showhosts">
+          </div>
+
+          <div class="barspacera"></div>
+
+          <div id="showalerts">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+<% else %>
+  <% redirect_to '/userlogin' %>
+<% end %>
+<% end %>

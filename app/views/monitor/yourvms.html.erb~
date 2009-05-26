@@ -1,0 +1,23 @@
+<% for machine in @yourvms %>
+  <% if(machine.name =~ /^Template-*/) %>
+  <% else %>
+    <script type="text/javascript">
+      function displayfocusl<%= machine.name %>() {
+        $.ajax({
+          url: "/monitor/<%= params[:username] %>/<%= machine.name %>",
+          cache: false,
+          success: function(html) {
+            $("#displayfocusl<%= machine.name %>").html(html);
+          }
+        });
+      };
+    </script>
+    <a id="displayfocusl<%= machine.name %>" onClick="displayfocusl<%= machine.name %>();" href = "#"><img src="/images/magnifier.png" border="0"/></a>
+    <% @starttime = machine.starttime.strftime("%Y-%m-%d %H:%M") %>
+    <% if((@nowtime = Time.now.strftime("%Y-%m-%d %H:%M").gsub(/[-:\s]/, '').to_i - @starttime.gsub(/[-:\s]/, '').to_i) > 10000) %>
+      <b><%= machine.name %></b> <br/>
+    <% else %>
+      <%= machine.name %> <br/>
+    <% end %>
+  <% end %>
+<% end %>

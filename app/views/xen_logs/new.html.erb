@@ -1,0 +1,11 @@
+<h1>New xen_log</h1>
+
+<% form_for(@xen_log) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', xen_logs_path %>

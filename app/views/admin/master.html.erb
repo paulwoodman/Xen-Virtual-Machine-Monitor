@@ -1,0 +1,72 @@
+<script type="text/javascript">
+  function displaypopupMaster() {
+    $.ajax({
+      url: "/admin/poweron/Template-WindowsMaster",
+      cache: false,
+      success: function(html) {
+        $("#popup").html(html);
+      }
+    });
+  };
+  function displaycommitMaster() {
+    $.ajax({
+      url: "/admin/commit/Template-WindowsMaster",
+      cache: false,
+      success: function(html) {
+        $("#popup").html(html);
+      }
+    });
+  };
+  function startMaster() {
+    fillscreen();
+    displaypopupMaster();
+  };
+  function commitMaster() {
+    fillscreen();
+    displaycommitMaster();
+  };
+</script>
+
+<div class="barwhite">
+  <div class="bartextwhite">
+    Master Image
+  </div>
+  <div class="bartextbwhite">
+    <% for master in @masterlock %>
+      <% if(master.lock == 0) %>
+        <a id="masterlock" onClick = "masterlock();" href="#">Lock</a>
+      <% elsif(master.lock == 1) %>
+        <% if(master.owner == current_user.login) %>
+          <% @owner = 1 %>
+          <a id="masterlock" onClick = "masterunlock();" href="#">Unlock</a>
+        <% else %>
+          Locked by <%= master.owner %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% if(@owner == 1) %>
+  <div class="lefttextwhite">
+    <% for machine in @machine %>
+      <% if(machine.state == 0 && machine.ip == '') %>
+        <a href="#" onClick="startMaster()">Power On</a><br/>
+      <% else %>
+      <% end %>
+      <% if(machine.state == 0 && machine.ip != '') %>
+        <a href="#" onClick="commitMaster()">Commit Image</a><br/>
+      <% end %>
+      <% if(machine.vncport > 5900) %>
+        <% if(machine.hostuuid == '172.25.2.245') %>
+          <% @serverid = 1 %>
+        <% elsif(machine.hostuuid == '172.25.2.246') %>
+          <% @serverid = 2 %>
+        <% else %>
+          <% @serverid = 3 %>
+        <% end %>
+        <a href = "/viewer/<%= machine.name %>/<%= @serverid %>/<%= machine.vncport %>" target="vnc">Connect to Console</a>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

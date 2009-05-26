@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  <link rel="stylesheet" href="/stylesheets/xs.css" type="text/css"/>
+</head>
+
+<body>
+
+<div id="header">
+  <div class="header"></div>
+</div>
+
+<div id="main">
+  <div id="loginbox">
+    <div id="login-form">
+      <% form_tag(:controller => 'userlogin', :action => 'submit') do %>
+        Username: <a id="login-name"><%= text_field_tag 'username' %></a>
+        Password: <a id="login-password"><%= password_field_tag 'password' %></a>
+        <a id="submitform"><%= submit_tag 'Log In' %></a>
+      <% end %>
+    </div>
+  </div>
+</div>

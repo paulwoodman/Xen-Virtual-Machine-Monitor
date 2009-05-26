@@ -1,0 +1,19 @@
+# pgrep -f "$COMMAND" // will give you a process ID if it's running.
+
+ssh -N -L iexra.iex.com:15901:localhost:5901 root@server1  # 
+ssh -N -L iexra.iex.com:15902:localhost:5902 root@server1  # 
+ssh -N -L iexra.iex.com:15903:localhost:5903 root@server1  #### do these commands for each host where server1 is the ipaddress of 
+	...                                                # the host
+ssh -N -L iexra.iex.com:15920:localhost:5920 root@server1  #
+
+ssh -N -L iexra.iex.com:25901:localhost:5901 root@server2 
+ssh -N -L iexra.iex.com:25902:localhost:5902 root@server2 
+ssh -N -L iexra.iex.com:25903:localhost:5903 root@server2 
+...
+ssh -N -L iexra.iex.com:25920:localhost:5920 root@server2
+
+ssh -N -L iexra.iex.com:35901:localhost:5901 root@server3 
+ssh -N -L iexra.iex.com:35902:localhost:5902 root@server3 
+ssh -N -L iexra.iex.com:35903:localhost:5903 root@server3 
+...
+ssh -N -L iexra.iex.com:35920:localhost:5920 root@server3

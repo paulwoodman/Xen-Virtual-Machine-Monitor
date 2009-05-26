@@ -1,0 +1,79 @@
+<% for machine in @runningmachines %>
+  <script type="text/javascript">
+    function displayfocus<%= machine.name %>() {
+      $.ajax({
+        url: "/monitor/<%= machine.name %>",
+        cache: false,
+        success: function(html) {
+          $("#displayfocus<%= machine.name %>").html(html);
+        }
+      });
+    };
+  </script>
+<% end %>
+
+<% for machine in @runningmachines %>
+ <% if(machine.name =~ /^Template-*/) %>
+ <% elsif(machine.name =~ /^RunningTemplate-*/) %>
+ <% else %>
+  <div id="vmlist">
+    <div id="vmlistcontainer">
+      <div class="vmname"><a href = "#"><%= machine.name %></a></div>
+      <div id="details">
+        <div id="detailsright">
+          <% @totalmem = (machine.ram/1024).round %>
+          <% @freemem = (machine.freemem/1024).round %>
+          <% @usedmem = (@totalmem-@freemem).round %>
+          <% if @usedmem == -46 %>
+            <% @usedmem = 0 %>
+          <% end %>
+          <% if machine.freemem == 0 %>
+            <% @percentshow = 121; %>
+          <% else %>
+          <!-- Formula = 121 - (121 x (usedmem / totalmem)) -->
+            <% @percentshow = (121 - (121*@usedmem.fdiv(@totalmem))) %>
+          <% end %>
+          Memory: <img src="/images/percentImage.png" alt="" class="percentImage" style="background-position: -<%= @percentshow %> 0pt;"/><%= @usedmem %>/<%= @totalmem %>M<br/>
+          Hard Drive: <%= machine.hdsize %>GB
+        </div>
+        Started By: <%= machine.username %><br/>
+        <% @starttime = machine.starttime.strftime("%Y-%m-%d %H:%M") %>
+        Up Since: <%= @starttime %><br/>
+        IP Address: <%= machine.ip %><br/>
+      </div>
+    </div>
+    <% @difftime = Time.now.strftime("%Y-%m-%d %H:%M").gsub(/[-:\s]/, '').to_i - @starttime.gsub(/[-:\s]/, '').to_i %>
+    <% if (@difftime < 600) %>
+      <div id="detailsbottom">
+    <% elsif (@difftime > 125959 && @difftime < 930000) %>
+      <div id="detailsbottom">
+    <% else %>
+      <div id="detailsbottomred">
+    <% end %>
+
+    <% if (@difftime < 600) %>
+      <div class="detailsbottomtext">
+    <% elsif (@difftime > 125959 && @difftime < 930000) %>
+      <div class="detailsbottomtext">
+    <% else %>
+      <div class="detailsbottomtextred">
+        <b>Up for more than 6 hours</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <% end %>
+        <% if(machine.vncport > 5900) %>
+          <% if(machine.hostuuid == '172.25.2.245') %>
+            <% @serverid = 1 %>
+          <% elsif(machine.hostuuid == '172.25.2.246') %>
+            <% @serverid = 2 %>
+          <% else %>
+            <% @serverid = 3 %>
+          <% end %>
+          <a href = "/viewer/<%= machine.name %>/<%= @serverid %>/<%= machine.vncport %>" target="vnc"><img src="/images/console.png" border="0"/> Connect to Console</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <% end %>
+        <a id="displayfocus<%= machine.name %>" onClick="displayfocus<%= machine.name %>();" href="#"><img src="/images/magnifier.png" border="0"/> Focus</a>
+      </div>
+    </div>
+  </div>
+  <div id="vmspacer">
+  </div>
+ <% end %>
+<% end %>

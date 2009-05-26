@@ -1,0 +1,13 @@
+<% if(@count == 0) %>
+<% else %>
+  <div class="barred">
+    <div class="bartextred">
+      Alerts
+    </div>
+  </div>
+  <div class="lefttext">
+    <% for alert in @alerts %>
+      <li><%= alert.message %></li>
+    <% end %>
+  </div>
+<% end %>

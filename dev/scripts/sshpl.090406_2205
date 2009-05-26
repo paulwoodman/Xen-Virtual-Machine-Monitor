@@ -1,0 +1,61 @@
+#!/usr/bin/perl
+
+$log = /var/www/scripts/ssh.log; #output is logged to this file
+$begin_ip = "172.25.2.24"; #This is the first part of the hosts' ipaddresses which is the same for all of them.
+$sleepduration = 120; #SET THIS TO THE DELAY YOU WANT BETWEEN RUNS OF THIS SCRIPT
+
+#while (true) {
+
+open(LOG, ">>$log") || die print "no file ${log}\n"; 
+
+@processes = `ps -ef |grep "ssh -N -L iexra.iex.com"|grep -v "grep"`;
+
+for ( $end_ip = 5; $end_ip <= 7; $end_ip++ ) {
+
+$host_ip = "${begin_ip}${end_ip}";
+$i = $end_ip - 4;
+
+for ( $z = 1; $z <= 20; $z++ ) {
+
+if ( $z <= 9 ) { $x = "0${z}"; } else { $x = $z; }
+
+$foundflag = 0;
+
+foreach $process (@processes) {
+
+chomp $process;
+
+#print "process $process\n";
+
+if ( $process =~ /ssh -N -L iexra.iex.com:${i}59${x}:localhost:59$x root\@${host_ip}/ ) {
+
+#print "found $process\n";
+$foundflag = 1;
+break;
+
+} #if ( $process =~ /ssh -N -L iexra.iex.com:${i}59${x}:localhost:59$x root\@${host_ip}/ )
+
+} #foreach $process (@processes)
+
+if ( $foundflag == 0 ) {
+
+#system("ssh -N -L iexra.iex.com:${i}5901:localhost:5901 root\@${host_ip}");
+print "STARTING: ssh -N -L iexra.iex.com:${i}59${x}:localhost:59${x} root\@${host_ip}\n";
+
+} else {
+
+print "FOUND: ssh -N -L iexra.iex.com:${i}59${x}:localhost:59${x} root\@${host_ip}\n";
+
+} #if ( $foundflag == 0 )
+
+} #for ( $i = 1; $i <= 20; $i++ ) {
+
+} #for ( $end_ip = 5; $end_ip <= 7; $end_ip++ )
+
+close (LOG);
+
+sleep $sleepduration;
+
+} #while (true)
+
+exit 0;

@@ -1,0 +1,90 @@
+<div id="rightbox">
+  <div class="newgroup">
+    <div id="groupslidein"><a href="#" onClick="groupslidein();">Create New Group</a></div>
+    <div id="groupslider">
+      <form action="/admin/newgroup">
+        Group Name: <input type="text" name="groupname"><br/>
+        <input id="submitformdark" onClick="fillscreen()" type="submit" value="Create" />
+      </form>
+      <a href="#" onClick="groupslideout();">Cancel</a>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    <% for group in @grouplist %>
+
+      function disable<%= group.name %>() {
+        $("#disable<%= group.name %>").load("/admin/disablegroup/<%= group.name %>");
+      };
+      function enable<%= group.name %>() {
+        $("#enable<%= group.name %>").load("/admin/enablegroup/<%= group.name %>");
+      };
+      function unlock<%= group.name %>() {
+        $("#unlock<%= group.name %>").load("/admin/unlockgroup/<%= group.name %>");
+      };
+      function lock<%= group.name %>() {
+        $("#lock<%= group.name %>").load("/admin/lockgroup/<%= group.name %>");
+      };
+
+      function setdetails<%= group.name %>() {
+        $("#setdetails<%= group.name %>").load("/admin/setdetails/<%= group.name %>");
+      };
+
+      function calldisable<%= group.name %>() {
+        disable<%= group.name %>();
+        setTimeout('displaygrouplist()', 1000);
+      };
+      function callenable<%= group.name %>() {
+        enable<%= group.name %>();
+        setTimeout('displaygrouplist()', 1000);
+      };
+      function calllock<%= group.name %>() {
+        lock<%= group.name %>();
+        setTimeout('displaygrouplist()', 1000);
+      };
+      function callunlock<%= group.name %>() {
+        unlock<%= group.name %>();
+        setTimeout('displaygrouplist()', 1000);
+      };
+      function callsetdetails<%= group.name %>() {
+        setdetails<%= group.name %>();
+        setTimeout('displaygrouplist()', 5000);
+      };
+    <% end %>
+  </script>
+
+  <% for group in @grouplist %>
+    <style type="text/css">
+      #lock<%= group.name %> { padding-right: 22px; }
+      #unlock<%= group.name %> { padding-right: 8px; }
+      #enable<%= group.name %> { padding-right: 10px; }
+      #disable<%= group.name %> { padding-right: 7px; }
+    </style>
+    <div id="templatelist">
+      <div id="templatelistl">
+        <div class="templatelistl">
+          <div class="templateon"><%= group.name %></div>
+        </div>
+      </div>
+      <div id="templatelistr">
+
+        <% if(group.available == 1) %>
+          <a id="disable<%= group.name %>" onClick = "calldisable<%= group.name %>();" href="#">Disable</a>
+        <% else %>
+          <a id="enable<%= group.name %>" onClick = "callenable<%= group.name %>();" href="#">Enable</a>
+        <% end %>
+
+        <% if(group.lock == 1 && group.owner == current_user.login) %>
+          <a id="unlock<%= group.name %>" onClick = "callunlock<%= group.name %>();" href="#">Unlock</a>
+        <% elsif(group.lock == 0) %>
+          <a id="lock<%= group.name %>" onClick = "calllock<%= group.name %>();" href="#">Lock</a>
+        <% else %>
+          <a class="locked">Locked</a>
+        <% end %>
+
+
+        <a id="setdetails<%= group.name %>" onClick = "callsetdetails<%= group.name %>();" href="#">Details</a>
+      </div>
+    </div>
+  <% end %>
+</div>

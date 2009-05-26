@@ -1,0 +1,92 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/xs.css"/>
+    
+</head>
+
+<body>
+
+<div id="fillscreen">
+  <div id="popup">
+  </div>
+</div>
+
+<div id="header">
+  <div class="header"></div>
+</div>
+<div id="menu">
+  <ul>
+    <li><a href="/monitor"><span>Machine Monitor</span></a></li>
+    <% if(current_user.gid == 0) %>
+      <li><a href="/admin"><span>Administration</span></a></li>
+    <% end %>
+    <li><a href="/events"><span>Logs</span></a></li>
+    <li><a href="/userinfo"><span>User Info</span></a></li>
+  </ul>
+</div>
+
+<div id="showcontent">
+<div id="admincontent">
+  <div id="adminwrapper" class="clearfix">
+    <div id="adminright">
+
+        <div id="rightboxuser">
+          <% form_for :user, :url => users_path do |f| -%>
+          <p><label for="login">Login</label>
+          <%= f.text_field :login %></p>
+
+          <p><label for="name">Name</label>
+          <%= f.text_field :name %></p>
+
+          <p><label for="password">Password</label>
+          <%= f.password_field :password %></p>
+
+          <p><label for="gid">User Type</label><br/>
+          <%= radio_button("user", "gid", "1") %> User<br/>
+          <%= radio_button("user", "gid", "0") %> Administrator<br/>
+
+          <p><%= submit_tag 'Add User' %></p>
+          <% end -%>
+      
+        </div>
+      
+    </div>
+    <div id="adminleft">
+      <div id="leftbox">
+        <div class="barwhite">
+          <div class="bartextwhite">
+            Users
+          </div>
+
+          <div class="bartextbwhite">
+            <% if (current_user.gid == 0) %>
+              <a href="#">Add User</a>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="lefttextwhite">
+          <div class="userlist">
+             <% for user in @userlist %>
+               <div class="usereditlist">
+                 <% if (current_user.gid == 0) %>
+                   <a href="/userinfo/<%= user.login %>">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <% end %>
+                 <%= user.login %><div class="showname">(<%= user.name %>)</div>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,252 @@
+<!-- Don't render whole page if setting focus; just replace div and refresh -->
+<% if(params[:machinename]) %>
+  Wait...
+  <% User.update(current_user.id, { :activevm => params[:machinename] }) %>
+<% else %>
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/xs.css"/>
+
+  <script src="/javascripts/jquery.js"></script>
+  <script type="text/javascript">
+    function displayfocus() {
+      $.ajax({
+        url: "/monitor/focus",
+        cache: false,
+        success: function(html) {
+          $("#showfocus").html(html);
+        }
+      });
+      setTimeout('displayfocus()', 3000);
+    };
+    function displayyourvms() {
+      $.ajax({
+        url: "/monitor/yourvms",
+        cache: false,
+        success: function(html) {
+          $("#showyourvms").html(html);
+        }
+      });
+      setTimeout('displayyourvms()', 5000);
+    };
+    function displayalerts() {
+      $.ajax({
+        url: "/monitor/alerts",
+        cache: false,
+        success: function(html) {
+          $("#showalerts").html(html);
+        }
+      });
+      setTimeout('displayalerts()', 10000);
+    };
+    function displaymachines() {
+      $.ajax({
+        url: "/monitor/machines",
+        cache: false,
+        success: function(html) {
+          $("#showmachines").html(html);
+        }
+      });
+      setTimeout('displaymachines()', 3000);
+    };
+
+    <% for group in @grouplist %>
+      function displaywait<%= group.name %>() {
+        $.ajax({
+          url: "/wait.html",
+          cache: false,
+          success: function(html) {
+            $("#start<%= group.name %>").html(html);
+          }
+        });
+      };
+    <% end %>
+
+    function displayavailable() {
+      $.ajax({
+        url: "/monitor/available",
+        cache: false,
+        success: function(html) {
+          $("#showavailable").html(html);
+        }
+      });
+    };
+
+    function fillscreen() {
+      if ($("#fillscreen").is(":hidden")) {
+        $("#fillscreen").fadeIn("slow");
+      } else {
+        $("#fillscreen").fadeOut();
+        $("#fillscreen").show();
+      }
+    };
+    function unfillscreen() {
+      $("#fillscreen").fadeOut();
+    };
+    function displayprogress() {
+      $.ajax({
+        url: "/monitor/progressbar",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+    function displayprogressbuild() {
+      $.ajax({
+        url: "/monitor/progressbarbuilding",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+    function displayprogressstart() {
+      $.ajax({
+        url: "/monitor/progressbarstarting",
+        cache: false,
+        success: function(html) {
+          $("#popuptext").html(html);
+        }
+      });
+    };
+
+    <% for group in @grouplist %>
+      function displaypopup<%= group.name %>() {
+        $.ajax({
+          url: "/monitor/popup/<%= group.name %>",
+          cache: false,
+          success: function(html) {
+            $("#popup").html(html);
+          }
+        });
+      };
+
+      function vmCreate<%= group.name %>() {
+        $("#start").load("/monitor/start/<%= group.name %>");
+        setTimeout('unfillscreen()', 14000);
+        setTimeout('displayavailable()', 15000);
+      };
+
+      function startvm<%= group.name %>() { 
+        displayprogressbuild();
+        setTimeout('displayprogressstart()', 7000);
+        vmCreate<%= group.name %>();
+      };
+
+      function start<%= group.name %>() { 
+        fillscreen();
+        displaypopup<%= group.name %>();
+      };
+    <% end %>
+
+    function initialLoad() {
+      displayfocus();
+      displaymachines();
+      displayyourvms();
+      displayalerts();
+    };
+    $(document).ready(initialLoad);
+
+  </script>
+
+</head>
+
+<body>
+
+<div id="fillscreen">
+  <div id="popup">
+  </div>
+</div>
+
+<div id="header">
+  <div class="header"></div>
+</div>
+<div id="menu">
+  <ul>
+    <li><a href="/monitor"><span>Machine Monitor</span></a></li>
+    <% if(@admin == 1) %>
+      <li><a href="/admin"><span>Administration</span></a></li>
+    <% end %>
+    <li><a href="/events"><span>Logs</span></a></li>
+    <li><a href="/userinfo"><span>User Info</span></a></li>
+  </ul>
+</div>
+
+<div class="outer">
+  <div class="inner">
+    <div class="float-wrap">
+      <div id="content"> 
+        <div class="contentWrap"> 
+          <!-- Show Running Machines -->
+          <div id="showmachines">
+          </div>
+          <!-- End Show Running Machines -->
+        </div>
+      </div>
+
+      <div id="left"> 
+        <div class="left">
+          <div class="leftfix">
+            <div class="barwhite">
+              <div class="bartextwhite">
+                VM Focus
+              </div>
+            </div>
+            <div class="lefttext">
+              <!-- Show focused VM -->
+              <div id="showfocus">
+              </div>
+              <!-- End show focused VM -->
+            </div>
+            <div class="barspacer">
+            </div>
+            <div class="barwhite">
+              <div class="bartextwhite">
+                Your VMs
+              </div>
+            </div>
+
+            <div class="lefttext">
+              <div id="showyourvms">
+              </div>
+            </div>
+            <div class="barspacer">
+            </div>
+              <div id="showalerts">
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="clear">
+      </div> 
+    </div>
+
+    <div id="right"> 
+      <div class="barwhite">
+        <div class="bartextwhiter">
+          Available VMs
+        </div>
+      </div>
+      <div id="showavailable">
+        <div id="righttext">
+          <% for group in @grouplist %>
+            <div class="startvm"><a id="start<%= group.name %>" onClick="start<%= group.name %>();" href="#"><img src="/images/add_item.png" border="0"</a> <%= group.name %></div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="clear">
+    </div> 
+  </div>
+</div>
+
+</body>
+
+</html>
+
+<% end %>

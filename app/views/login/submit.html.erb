@@ -1,0 +1,50 @@
+<%
+  require 'digest/md5'
+  @username = params[:username]
+  @userpass = Digest::MD5.hexdigest(params[:password])
+  @sessionid = Digest::MD5.hexdigest(DateTime.now.to_s)
+  @userid = Digest::MD5.hexdigest(@username)
+  @cookieinfo = @sessionid + "-" + @userid
+%>
+
+<% for getuser in @getuser %>
+  <% if(getuser.password == @userpass) %>
+    <% @id = getuser.id %>
+    <% User.update(@id, { :sessionid => @sessionid }) %>
+    <% @message = params[:username] + " logged in" %>
+    <% XenLog.create( :logtype => '0', :message => @message ) %>
+    <% cookies[:auth_token] = { :value => @cookieinfo, :expires => 7.days.from_now } %>
+    <% @redirect = "/monitor/" + @username %>
+    <% redirect_to @redirect %>
+  <% end %>
+<% end %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  <link rel="stylesheet" href="/stylesheets/xs.css" type="text/css"/>
+</head>
+
+<body>
+
+<div id="header">
+  <div class="header"></div>
+</div>
+
+<div id="main">
+  <div id="loginbox">
+    <div id="login-form">
+      <% form_tag(:controller => 'userlogin', :action => 'submit') do %>
+        Username: <a id="login-name"><%= text_field_tag 'username' %></a>
+        Password: <a id="login-password"><%= password_field_tag 'password' %></a>
+        <a id="submitform"><%= submit_tag 'Log In' %></a>
+        <div class="wrongpassword">Wrong Username/Password</div>
+      <% end %>
+    </div>
+  </div>
+</div>

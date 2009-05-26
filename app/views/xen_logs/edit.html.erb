@@ -1,0 +1,12 @@
+<h1>Editing xen_log</h1>
+
+<% form_for(@xen_log) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @xen_log %> |
+<%= link_to 'Back', xen_logs_path %>

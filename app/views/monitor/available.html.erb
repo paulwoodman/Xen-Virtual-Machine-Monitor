@@ -1,0 +1,5 @@
+<div id="righttext">
+  <% for group in @grouplist %>
+    <div class="startvm"><a id="start<%= group.name %>" onClick="start<%= group.name %>();" href="#"><img src="/images/add_item.png" border="0"</a> <%= group.name %></div>
+  <% end %>
+</div>
